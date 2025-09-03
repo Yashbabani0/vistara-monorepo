@@ -1,27 +1,28 @@
 "use client";
-
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import {
-  User,
-  Search,
-  Shield,
-  Edit,
-  UserCheck,
-  Clock,
-  Mail,
-} from "lucide-react";
+import { User, Search, Shield, UserCheck, Clock, Mail } from "lucide-react";
 import { useState, useMemo } from "react";
 
+type User = {
+  id: string;
+  name: string | null;
+  email: string | null;
+  createdAt: string;
+  image?: string | null;
+  role?: string | null;
+};
+
 export default function UsersTable() {
-  const users = useQuery(api.getAllUsers.getUsers);
+  const users = useQuery(api.getAllUsers.getUsers) as User[] | undefined;
+
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("createdAt");
-  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortBy, setSortBy] = useState<keyof User>("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const filteredAndSortedUsers = useMemo(() => {
     if (!users) return [];
@@ -38,12 +39,12 @@ export default function UsersTable() {
     });
 
     return filtered.sort((a, b) => {
-      let aVal = a[sortBy];
-      let bVal = b[sortBy];
+      let aVal: string | number = a[sortBy] ?? "";
+      let bVal: string | number = b[sortBy] ?? "";
 
       if (sortBy === "createdAt") {
-        aVal = new Date(aVal).getTime();
-        bVal = new Date(bVal).getTime();
+        aVal = new Date(aVal as string).getTime();
+        bVal = new Date(bVal as string).getTime();
       }
 
       if (sortOrder === "asc") {
@@ -56,7 +57,7 @@ export default function UsersTable() {
 
   if (!users) {
     return (
-      <div className="flex items-center justify-center min-h-[400px] mx-auto mt-20">
+      <div className="flex items-center justify-center min-h-[400px] m-auto">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Loading users...</p>
@@ -231,7 +232,7 @@ export default function UsersTable() {
                         <div
                           className={`w-12 h-12 rounded-full flex items-center justify-center text-gray-700 dark:text-gray-300 font-semibold border-2 ${getRoleColor(user.role || "user")}`}
                         >
-                          {user.name?.[0]?.toUpperCase() || "U"}
+                          {user.name ? user.name[0].toUpperCase() : "U"}
                         </div>
                       )}
                       <div className="ml-4">
@@ -240,8 +241,10 @@ export default function UsersTable() {
                         </div>
                         <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
                           {getRoleIcon(user.role || "user")}
-                          {user.role?.charAt(0).toUpperCase() +
-                            user.role?.slice(1) || "User"}
+                          {user.role
+                            ? user.role.charAt(0).toUpperCase() +
+                              user.role.slice(1)
+                            : "User"}
                         </div>
                       </div>
                     </div>
@@ -252,27 +255,22 @@ export default function UsersTable() {
                       <Mail className="w-4 h-4 mr-2 text-gray-400" />
                       <span
                         className="truncate max-w-[200px]"
-                        title={user.email}
+                        title={user.email ?? undefined}
                       >
-                        {user.email}
+                        {user.email ?? "No Email"}
                       </span>
                     </div>
                   </td>
 
                   <td className="px-6 py-4 whitespace-nowrap">
                     <Badge
-                      variant={
-                        user.role === "admin"
-                          ? "destructive"
-                          : user.role === "editor"
-                            ? "secondary"
-                            : "default"
-                      }
+                      variant={user.role === "admin" ? "secondary" : "default"}
                       className="inline-flex items-center gap-1"
                     >
                       {getRoleIcon(user.role || "user")}
-                      {user.role?.charAt(0).toUpperCase() +
-                        user.role?.slice(1) || "User"}
+                      {user.role
+                        ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+                        : "User"}
                     </Badge>
                   </td>
 
