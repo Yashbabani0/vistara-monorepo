@@ -133,8 +133,9 @@ const ViewAllCollections = () => {
                   collections.filter((col) => {
                     const createdDate = new Date(col._creationTime);
                     const now = new Date();
-                    const daysDiff =
-                      (now - createdDate) / (1000 * 60 * 60 * 24);
+                   const daysDiff =
+                      (now.getTime() - createdDate.getTime()) /
+                      (1000 * 60 * 60 * 24);
                     return daysDiff <= 7;
                   }).length
                 }
