@@ -170,8 +170,8 @@ export default function UsersTable() {
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {
                 const [field, order] = e.target.value.split("-");
-                setSortBy(field);
-                setSortOrder(order);
+                setSortBy(field as keyof User);
+                setSortOrder(order as "asc" | "desc");
               }}
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300"
             >
