@@ -12,6 +12,7 @@ import {
   Check,
   X,
 } from "lucide-react";
+import type { Id } from "@/convex/_generated/dataModel";
 
 const ViewAllCategories = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,20 +72,20 @@ const ViewAllCategories = () => {
     const res = await addCategoryMutation({ name });
     alert(`Category added with slug: ${res.slug}`);
   };
-  const handleEdit = (categoryId: string, currentName: string) => {
+  const handleEdit = (categoryId: Id<"categories">, currentName: string) => {
     setEditingId(categoryId);
     setEditValue(currentName);
   };
 
-  const handleSaveEdit = async (categoryId: string) => {
-    await editCategory({ id: categoryId as any, name: editValue });
+  const handleSaveEdit = async (categoryId: Id<"categories">) => {
+    await editCategory({ id: categoryId, name: editValue });
     setEditingId(null);
     setEditValue("");
   };
 
-  const handleDelete = async (categoryId: string) => {
+  const handleDelete = async (categoryId: Id<"categories">) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
-      await deleteCategory({ id: categoryId as any });
+      await deleteCategory({ id: categoryId });
       alert("Category deleted!");
     }
   };
