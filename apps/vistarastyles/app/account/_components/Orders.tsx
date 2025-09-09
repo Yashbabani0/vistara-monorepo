@@ -14,11 +14,14 @@ import { Progress } from "@radix-ui/react-progress";
 import { useQuery } from "convex/react";
 import {
   Calendar,
+  CheckCircle,
+  Clock,
   CreditCard,
   IndianRupee,
   Package,
   Package2,
   ShoppingBag,
+  Truck,
 } from "lucide-react";
 import React from "react";
 
