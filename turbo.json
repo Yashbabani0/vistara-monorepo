@@ -20,7 +20,12 @@
         "NEXT_PUBLIC_POSTHOG_KEY",
         "NEXT_PUBLIC_POSTHOG_HOST",
         "RESEND_API_KEY",
-        "CLERK_JWT_ISSUER_DOMAIN"
+        "CLERK_JWT_ISSUER_DOMAIN",
+        "NODE_ENV",
+        "CLERK_SIGN_IN_URL",
+        "CLERK_SIGN_UP_URL",
+        "RAZORPAY_KEY_SECRET",
+        "RAZORPAY_KEY_ID"
       ]
     },
     "lint": {
