@@ -1,10 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function Logo() {
   return (
-    <div className="md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+    <Link
+      href="/"
+      className="md:absolute md:left-1/2 md:transform md:-translate-x-1/2"
+    >
       <Image src="/logo.png" alt="Logo" width={100} height={100} />
-    </div>
+    </Link>
   );
 }

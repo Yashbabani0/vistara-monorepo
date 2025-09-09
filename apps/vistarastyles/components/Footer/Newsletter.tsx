@@ -52,7 +52,6 @@ export default function NewsletterForm() {
       ) {
         setMessage("⚠️ Already subscribed.");
       } else if (result?.success === true) {
-        // ✅ Call Next.js API to send mail
         try {
           const res = await fetch("/api/newsletter", {
             method: "POST",
@@ -97,7 +96,7 @@ export default function NewsletterForm() {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    setMessage(null); // clear message when typing
+                    setMessage(null);
                   }}
                   className="border rounded-lg p-2 w-full"
                 />
@@ -106,18 +105,9 @@ export default function NewsletterForm() {
             </FormItem>
           )}
         />
-
-        <Button
-          type="submit"
-          disabled={loading || !form.formState.isValid}
-          className="text-white rounded-lg px-4 py-3 cursor-pointer"
-        >
-          {loading ? "Subscribing..." : "Subscribe"}
-        </Button>
-
         {message && (
           <p
-            className={`text-sm text-center mt-2 ${
+            className={`text-sm flex gap-2 items-center justify-center ${
               message.includes("✅")
                 ? "text-green-600"
                 : message.includes("⚠️")
@@ -128,6 +118,13 @@ export default function NewsletterForm() {
             {message}
           </p>
         )}
+        <Button
+          type="submit"
+          disabled={loading || !form.formState.isValid}
+          className="text-white rounded-lg px-4 py-3 cursor-pointer bg-amber-300 hover:bg-yellow-500 transition-all duration-300 ease-in-out"
+        >
+          {loading ? "Subscribing..." : "Subscribe"}
+        </Button>
       </form>
     </Form>
   );

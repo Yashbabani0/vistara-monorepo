@@ -1,3 +1,4 @@
+// convex/getAllUsers.ts
 import { query } from "./_generated/server";
 
 export const getUsers = query({

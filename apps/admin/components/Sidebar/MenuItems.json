@@ -33,25 +33,7 @@
     {
       "title": "Orders",
       "icon": "shopping-cart",
-      "path": "/dashboard/orders",
-      "subItems": [
-        {
-          "title": "All Orders",
-          "path": "/dashboard/orders"
-        },
-        {
-          "title": "Pending",
-          "path": "/dashboard/orders/pending"
-        },
-        {
-          "title": "Processing",
-          "path": "/dashboard/orders/processing"
-        },
-        {
-          "title": "Completed",
-          "path": "/dashboard/orders/completed"
-        }
-      ]
+      "path": "/dashboard/orders"
     },
     {
       "title": "Customers",
@@ -66,22 +48,6 @@
         {
           "title": "Banners",
           "path": "/dashboard/marketing/banners"
-        },
-        {
-          "title": "Add Banner",
-          "path": "/dashboard/marketing/banners/new"
-        },
-        {
-          "title": "Promotions",
-          "path": "/dashboard/marketing/promotions"
-        },
-        {
-          "title": "Coupons",
-          "path": "/dashboard/marketing/coupons"
-        },
-        {
-          "title": "Add Coupon",
-          "path": "/dashboard/marketing/coupons/new"
         }
       ]
     },
@@ -93,10 +59,6 @@
         {
           "title": "Sales Overview",
           "path": "/dashboard/analytics/sales"
-        },
-        {
-          "title": "Customer Insights",
-          "path": "/dashboard/analytics/customers"
         },
         {
           "title": "Product Performance",
@@ -111,26 +73,7 @@
       "subItems": [
         {
           "title": "Support Tickets",
-          "path": "/dashboard/support/tickets"
-        },
-        {
-          "title": "Feedback Forms",
-          "path": "/dashboard/support/feedback"
-        }
-      ]
-    },
-    {
-      "title": "Policies",
-      "icon": "file-text",
-      "path": "/dashboard/policies",
-      "subItems": [
-        {
-          "title": "Add new policy",
-          "path": "/dashboard/policies/add"
-        },
-        {
-          "title": "View policies",
-          "path": "/dashboard/policies/view"
+          "path": "/dashboard/support/contactus"
         }
       ]
     }

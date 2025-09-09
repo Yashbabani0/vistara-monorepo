@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, Edit } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -93,18 +93,25 @@ export default function ViewAllProductsPage() {
       currency: "INR",
     }).format(price);
 
-  const getStatusBadges = (flags: any) => {
-    const badges = [];
-    if (flags.isActive)
-      badges.push({ label: "Active", variant: "default" as const });
-    if (flags.isNewArrival)
-      badges.push({ label: "New", variant: "secondary" as const });
-    if (flags.isOnSale)
-      badges.push({ label: "Sale", variant: "destructive" as const });
-    if (flags.isFastSelling)
-      badges.push({ label: "Fast Selling", variant: "outline" as const });
-    if (flags.isLimitedEdition)
-      badges.push({ label: "Limited", variant: "outline" as const });
+  // Use the product root booleans from your schema (defensive checks)
+  const getStatusBadges = (product: any) => {
+    if (!product || typeof product !== "object") return [];
+
+    const badges: {
+      label: string;
+      variant: "default" | "secondary" | "destructive" | "outline";
+    }[] = [];
+
+    if (product.isActive) badges.push({ label: "Active", variant: "default" });
+    if (product.isNewArrival)
+      badges.push({ label: "New", variant: "secondary" });
+    if (product.isOnSale)
+      badges.push({ label: "Sale", variant: "destructive" });
+    if (product.isFastSelling)
+      badges.push({ label: "Fast Selling", variant: "outline" });
+    if (product.isLimitedEdition)
+      badges.push({ label: "Limited", variant: "outline" });
+
     return badges;
   };
 
@@ -143,15 +150,19 @@ export default function ViewAllProductsPage() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
+                {products.map((product: any) => (
                   <tr key={product._id} className="border-b hover:bg-gray-50">
                     <td className="py-4 px-2">
                       <div className="flex items-center space-x-3">
                         {product.images && product.images.length > 0 ? (
                           <div className="w-12 h-12 relative rounded-lg overflow-hidden bg-gray-100">
                             <Image
-                              src={product.images[0]}
-                              alt={product.name}
+                              src={product.images[0]?.url ?? ""}
+                              alt={
+                                product.images[0]?.alt ??
+                                product.name ??
+                                "product"
+                              }
                               fill
                               className="object-cover"
                             />
@@ -174,54 +185,63 @@ export default function ViewAllProductsPage() {
                         </div>
                       </div>
                     </td>
+
                     <td className="py-4 px-2">
                       <Badge variant="outline">
-                        {product.category || "Uncategorized"}
+                        {product.categoryId
+                          ? String(product.categoryId)
+                          : "Uncategorized"}
                       </Badge>
                     </td>
+
                     <td className="py-4 px-2">
                       <div className="space-y-1">
                         <div className="font-medium">
-                          {formatPrice(product.basePrice)}
+                          {formatPrice(product.realPrice ?? 0)}
                         </div>
-                        {product.salePrice &&
-                          product.salePrice !== product.basePrice && (
-                            <div className="text-sm text-red-600">
-                              Sale: {formatPrice(product.salePrice)}
-                            </div>
-                          )}
                       </div>
                     </td>
+
                     <td className="py-4 px-2">
-                      <Badge variant="secondary">{product.size}</Badge>
+                      <Badge variant="secondary">
+                        {Array.isArray(product.sizes)
+                          ? product.sizes.join(", ")
+                          : (product.sizes ?? "—")}
+                      </Badge>
                     </td>
+
                     <td className="py-4 px-2">
                       <div className="flex flex-wrap gap-1 max-w-24">
-                        {product.colors
-                          ?.slice(0, 3)
-                          .map(
-                            (
-                              color: { hex: string; name: string },
-                              index: number
-                            ) => (
-                              <div
-                                key={index}
-                                className="w-6 h-6 rounded-full border-2 border-gray-300"
-                                style={{ backgroundColor: color.hex }}
-                                title={color.name}
-                              />
-                            )
-                          )}
-                        {product.colors && product.colors.length > 3 && (
-                          <div className="w-6 h-6 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center text-xs">
-                            +{product.colors.length - 3}
-                          </div>
+                        {Array.isArray(product.colors) &&
+                        product.colors.length > 0 ? (
+                          <>
+                            {product.colors
+                              .slice(0, 3)
+                              .map((color: any, index: number) => (
+                                <div
+                                  key={index}
+                                  className="w-6 h-6 rounded-full border-2 border-gray-300"
+                                  style={{
+                                    backgroundColor: color.hex ?? "#ffffff",
+                                  }}
+                                  title={color.name ?? ""}
+                                />
+                              ))}
+                            {product.colors.length > 3 && (
+                              <div className="w-6 h-6 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center text-xs">
+                                +{product.colors.length - 3}
+                              </div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="text-xs text-gray-500">No colors</div>
                         )}
                       </div>
                     </td>
+
                     <td className="py-4 px-2">
                       <div className="flex flex-wrap gap-1">
-                        {getStatusBadges(product.flags).map((badge, index) => (
+                        {getStatusBadges(product).map((badge, index) => (
                           <Badge
                             key={index}
                             variant={badge.variant}
@@ -231,19 +251,23 @@ export default function ViewAllProductsPage() {
                           </Badge>
                         ))}
                       </div>
-                      {product.collections &&
-                        product.collections.length > 0 && (
+                      {Array.isArray(product.collectionIds) &&
+                        product.collectionIds.length > 0 && (
                           <div className="text-xs text-gray-500 mt-1">
-                            {product.collections.length} collection(s)
+                            {product.collectionIds.length} collection(s)
                           </div>
                         )}
                     </td>
+
                     <td className="py-4 px-2">
                       <div className="flex space-x-2">
-                        {/* <Button variant="ghost" size="sm">
-                          <Edit className="w-4 h-4" />
-                        </Button> */}
-                        {/* ✅ Delete with confirmation */}
+                        <Link
+                          href={`/dashboard/products/edit/${product.slug}`}
+                          className="inline-flex items-center px-3 py-1 rounded-md border hover:bg-gray-50 text-sm"
+                        >
+                          <Edit className="w-4 h-4 mr-1" />
+                          Edit
+                        </Link>
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button

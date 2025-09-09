@@ -328,18 +328,25 @@ export default function Page() {
         return;
       }
 
+      const taxRate = Number(realPrice) > 2500 ? 18 : 5;
+
       const productPayload = {
         name: productName.trim(),
         slug: productSlug.trim(),
         description: productDescription.trim(),
-        images: uploadedUrls, // array of ImageKit public URLs (string[])
-        size: size || null,
-        colors, // Color[] e.g., [{name, hex}, ...]
+        images: uploadedUrls.map((url, idx) => ({
+          url,
+          alt: `Product image ${idx + 1}`,
+          position: idx + 1,
+        })),
+        sizes: size ? size.split(",").map((s) => s.trim()) : [],
+        colors,
         category: selectedCategory,
         collections: selectedCollections,
         price: showPrice ?? null,
         salePrice: realPrice ?? null,
         flags,
+        taxRate,
       };
 
       // Call Convex mutation to create the product record

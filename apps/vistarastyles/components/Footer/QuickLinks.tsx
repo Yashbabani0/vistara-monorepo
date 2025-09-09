@@ -9,7 +9,7 @@ export default function QuickLinks() {
         <li>
           <Link
             href="/about"
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm text-gray-600 hover:text-yellow-500 transition-all duration-300 ease-in-out"
           >
             About Us
           </Link>
@@ -17,23 +17,15 @@ export default function QuickLinks() {
         <li>
           <Link
             href="/contact"
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm text-gray-600 hover:text-yellow-500 transition-all duration-300 ease-in-out"
           >
             Contact Us
           </Link>
         </li>
         <li>
           <Link
-            href="/size-guide"
-            className="text-sm text-gray-600 hover:text-gray-900"
-          >
-            Size Guide
-          </Link>
-        </li>
-        <li>
-          <Link
             href="/shipping"
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm text-gray-600 hover:text-yellow-500 transition-all duration-300 ease-in-out"
           >
             Shipping Information
           </Link>
@@ -41,7 +33,7 @@ export default function QuickLinks() {
         <li>
           <Link
             href="/returns"
-            className="text-sm text-gray-600 hover:text-gray-900"
+            className="text-sm text-gray-600 hover:text-yellow-500 transition-all duration-300 ease-in-out"
           >
             Returns & Exchanges
           </Link>

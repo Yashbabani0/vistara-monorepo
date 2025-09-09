@@ -1,4 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
+import Link from "next/link";
 
 export default function ContactInfo() {
   return (
@@ -7,16 +8,24 @@ export default function ContactInfo() {
       <ul className="space-y-2">
         <li className="flex items-center text-sm text-gray-600">
           <MapPin className="h-4 w-4 mr-2" />
-          123 T-Shirt Street, Fashion City
+          Dr.shyama Prashad Mukherjee Nagar, <br /> Building-G, Flat no.504,
+          <br />
+          Rajkot, Gujarat 360005
         </li>
-        <li className="flex items-center text-sm text-gray-600">
+        <Link
+          href={"tel:+917623969483"}
+          className="flex items-center text-sm text-gray-600 hover:text-yellow-500 transition-all duration-300 ease-in-out"
+        >
           <Phone className="h-4 w-4 mr-2" />
-          +1 234 567 8900
-        </li>
-        <li className="flex items-center text-sm text-gray-600">
+          +917623969483
+        </Link>
+        <Link
+          href={"mailto:contactus@vistarastyles.com"}
+          className="flex items-center text-sm text-gray-600 hover:text-yellow-500 transition-all duration-300 ease-in-out"
+        >
           <Mail className="h-4 w-4 mr-2" />
-          support@tshirtstore.com
-        </li>
+          contactus@vistarastyles.com
+        </Link>
       </ul>
     </div>
   );

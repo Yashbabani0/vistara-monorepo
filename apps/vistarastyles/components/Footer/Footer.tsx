@@ -11,9 +11,9 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
-          <div className="space-y-4">
+          <div className="space-y-2">
             <h3 className="text-lg font-semibold">About Us</h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 pb-2">
               Your premier destination for high-quality t-shirts. We offer a
               wide range of styles, ensuring comfort and style for every
               occasion.

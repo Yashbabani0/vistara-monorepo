@@ -68,7 +68,7 @@ export default function Search() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="hover:bg-gray-100 rounded-full cursor-pointer flex items-center justify-center">
+        <button className="hover:bg-gray-100 hover:text-yellow-500 transition-all duration-300 ease-in-out rounded-full cursor-pointer flex items-center justify-center">
           <SearchIcon className="w-5 h-6" />
         </button>
       </DialogTrigger>

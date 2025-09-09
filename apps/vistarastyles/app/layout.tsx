@@ -1,7 +1,12 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "@/components/Nav/Navbar";
+import Footer from "@/components/Footer/Footer";
+import { Toaster } from "@/components/ui/sonner";
+import SyncUser from "./SyncUser";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +22,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={` antialiased`}>
-          <Providers>{children}</Providers>
+          <Providers>
+            <SyncUser />
+            <Navbar />
+            {children}
+            <Footer />
+            <Toaster closeButton duration={3000} position="top-right" />
+          </Providers>
         </body>
       </html>
     </ClerkProvider>

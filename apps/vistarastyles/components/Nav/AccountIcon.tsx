@@ -5,14 +5,17 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
 
-async function UserAuthStatus() {
+async function userId() {
   const { userId } = await auth();
+  return userId;
+}
 
+function UserAuthStatus() {
   if (!userId) {
     return (
       <Link
         href="/sign-in"
-        className="font-bold flex items-center justify-center"
+        className="font-bold flex items-center justify-center hover:text-yellow-500 transition-all duration-300 ease-in-out"
       >
         <User className="w-5 h-5" />
       </Link>
@@ -22,7 +25,7 @@ async function UserAuthStatus() {
   return (
     <Link
       href="/dashboard"
-      className="w-5 h-5 flex items-center justify-center"
+      className="w-5 h-5 flex items-center justify-center hover:text-yellow-500 transition-all duration-300 ease-in-out"
     >
       <UserButton />
     </Link>
