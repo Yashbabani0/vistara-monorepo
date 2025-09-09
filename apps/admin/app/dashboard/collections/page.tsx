@@ -63,7 +63,7 @@ const ViewAllCollections = () => {
     }
   };
 
-  const handleEdit = async (id: Id<'collections'>) => {
+  const handleEdit = async (id: Id<"collections">) => {
     const collection = collections.find((c) => c._id === id);
     const newName = window.prompt(
       "Edit collection name:",
@@ -75,7 +75,7 @@ const ViewAllCollections = () => {
     }
   };
 
-  const handleDelete = async (id: Id<'collections'>) => {
+  const handleDelete = async (id: Id<"collections">) => {
     if (window.confirm("Are you sure you want to delete this collection?")) {
       await deleteCollection({ id });
       alert("Collection deleted!");
@@ -133,7 +133,7 @@ const ViewAllCollections = () => {
                   collections.filter((col) => {
                     const createdDate = new Date(col._creationTime);
                     const now = new Date();
-                   const daysDiff =
+                    const daysDiff =
                       (now.getTime() - createdDate.getTime()) /
                       (1000 * 60 * 60 * 24);
                     return daysDiff <= 7;
@@ -252,17 +252,6 @@ const ViewAllCollections = () => {
                   <tr key={collection._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        {collection.image ? (
-                          <img
-                            className="h-12 w-12 rounded-lg mr-4 object-cover"
-                            src={collection.image}
-                            alt={collection.name}
-                          />
-                        ) : (
-                          <div className="h-12 w-12 rounded-lg mr-4 bg-purple-100 flex items-center justify-center">
-                            <Layers className="h-6 w-6 text-purple-600" />
-                          </div>
-                        )}
                         <div>
                           <div className="text-sm font-medium text-gray-900">
                             {collection.name || "Unnamed Collection"}

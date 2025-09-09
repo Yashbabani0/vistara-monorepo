@@ -437,25 +437,12 @@ export default function AdminHeroBanners() {
 
                             {/* Device Support Indicators */}
                             <div className="flex items-center gap-2">
-                              <Monitor
-                                className="h-4 w-4 text-green-600"
-                                title="Desktop image available"
-                              />
+                              <Monitor className="h-4 w-4 text-green-600" />
                               <Tablet
                                 className={`h-4 w-4 ${banner.tabletImageUrl ? "text-green-600" : "text-gray-300"}`}
-                                title={
-                                  banner.tabletImageUrl
-                                    ? "Tablet image available"
-                                    : "No tablet image"
-                                }
                               />
                               <Smartphone
                                 className={`h-4 w-4 ${banner.mobileImageUrl ? "text-green-600" : "text-gray-300"}`}
-                                title={
-                                  banner.mobileImageUrl
-                                    ? "Mobile image available"
-                                    : "No mobile image"
-                                }
                               />
                             </div>
                           </div>

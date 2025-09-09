@@ -266,13 +266,6 @@ const ViewAllCategories = () => {
                         />
                       ) : (
                         <div className="flex items-center">
-                          {category.image && (
-                            <img
-                              className="h-10 w-10 rounded-full mr-4 object-cover"
-                              src={category.image}
-                              alt={category.name}
-                            />
-                          )}
                           <div>
                             <div className="text-sm font-medium text-gray-900">
                               {category.name || "Unnamed Category"}

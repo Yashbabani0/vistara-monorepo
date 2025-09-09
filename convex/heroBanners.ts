@@ -1,6 +1,19 @@
 // convex/heroBanners.ts
+import { Id } from "./_generated/dataModel";
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+
+type HeroBannerPatch = Partial<{
+  title?: Id<"heroBanners">;
+  pcImageUrl?: string;
+  pcAltText?: string;
+  tabletImageUrl?: string;
+  tabletAltText?: string;
+  mobileImageUrl?: string;
+  mobileAltText?: string;
+  url?: string;
+  isActive?: boolean;
+}>;
 
 export const getAll = query({
   handler: async (ctx) => {
@@ -72,14 +85,16 @@ export const update = mutation({
     mobileAltText: v.optional(v.string()),
     url: v.optional(v.string()),
     isActive: v.optional(v.boolean()),
-
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args;
     const patch: Record<string, any> = { updatedAt: Date.now() };
-    for (const k of Object.keys(rest)) {
-      if (rest[k] !== undefined) patch[k] = rest[k];
+
+    for (const k of Object.keys(rest) as Array<keyof typeof rest>) {
+      const val = rest[k];
+      if (val !== undefined) patch[k as string] = val;
     }
+
     await ctx.db.patch(id, patch);
     return { ok: true, id };
   },

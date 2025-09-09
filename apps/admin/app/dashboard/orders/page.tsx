@@ -6,6 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import Image from "next/image";
 import Link from "next/link";
+import { Id } from "@/convex/_generated/dataModel";
 
 const ORDER_STATUS_OPTIONS = [
   "placed",
@@ -173,7 +174,7 @@ export default function AdminOrdersPage() {
     }));
   }
 
-  async function changeOrderStatus(orderId: string, newStatus: string) {
+  async function changeOrderStatus(orderId: Id<"orders">, newStatus: string) {
     const destructive = ["cancelled", "canceled"];
     if (destructive.includes(newStatus.toLowerCase())) {
       const ok = window.confirm(
@@ -195,7 +196,7 @@ export default function AdminOrdersPage() {
   }
 
   async function changePaymentStatus(
-    orderId: string,
+    orderId: Id<"orders">,
     newPaymentStatus: string
   ) {
     try {

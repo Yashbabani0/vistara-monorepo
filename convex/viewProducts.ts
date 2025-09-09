@@ -56,15 +56,20 @@ export const getByCollection = query({
       .query("collections")
       .filter((q) => q.eq(q.field("slug"), args.slug))
       .first();
-
     if (!collection) return [];
 
-    // use the index on collectionIds
-    return await ctx.db
-      .query("products")
-      .withIndex("by_collection", (q) => q.eq("collectionIds", collection._id))
-      .filter((q) => q.eq(q.field("isActive"), true))
-      .collect();
+    // iterate the query (stream) and return only matching docs
+    const results = [];
+    for await (const p of ctx.db.query("products")) {
+      // p.collectionIds can be undefined or an array
+      if (
+        Array.isArray(p.collectionIds) &&
+        p.collectionIds.some((id) => String(id) === String(collection._id))
+      ) {
+        if (p.isActive) results.push(p);
+      }
+    }
+    return results;
   },
 });
 

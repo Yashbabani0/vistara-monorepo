@@ -2,11 +2,23 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
 
-/**
- * getSalesSummary
- * args: { from?: number, to?: number } timestamps (ms)
- * returns: { totalRevenue, totalOrders, avgOrderValue, refundsAmount, cancelledCount }
- */
+// import Id if your generated dataModel exposes it
+import type { Id } from "./_generated/dataModel";
+
+type PossibleProductId =
+  | Id<"products">
+  | string
+  | { _id: Id<"products"> }
+  | null
+  | undefined;
+
+interface OrderItem {
+  productId?: PossibleProductId;
+  name?: string;
+  price?: number;
+  quantity?: number;
+}
+
 export const getSalesSummary = query({
   args: {
     from: v.optional(v.number()),
@@ -47,12 +59,6 @@ export const getSalesSummary = query({
   },
 });
 
-/**
- * getDailySales
- * args: { from?: number, to?: number, tz?: string }
- * returns: [{ date: 'YYYY-MM-DD', revenue, ordersCount }]
- * - uses locale 'en-CA' + timezone 'Asia/Kolkata' to produce ISO date YYYY-MM-DD
- */
 export const getDailySales = query({
   args: {
     from: v.optional(v.number()),
@@ -100,11 +106,6 @@ export const getDailySales = query({
   },
 });
 
-/**
- * getTopProducts
- * args: { from?: number, to?: number, limit?: number }
- * returns: [{ productId, name, revenue, quantity }]
- */
 export const getTopProducts = query({
   args: {
     from: v.optional(v.number()),
@@ -120,16 +121,36 @@ export const getTopProducts = query({
     const agg: Record<string, { name: string; revenue: number; qty: number }> =
       {};
 
+    function normalizeProductId(it: OrderItem): string {
+      const p = it.productId;
+
+      if (p == null) {
+        // productId missing — fallback to name or unknown
+        return it.name ?? "unknown";
+      }
+
+      // if it's a simple string or Convex Id (branded), String(...) works
+      if (typeof p === "string") return p;
+
+      // if it's an object like { _id: Id<"products"> }
+      if (typeof p === "object" && "_id" in p) {
+        // p._id might be branded; convert to string
+        return String((p as any)._id);
+      }
+
+      // last fallback:
+      return String(p);
+    }
+
     for (const o of orders) {
       const ts = o.updatedAt ?? 0;
       if (ts < from || ts > to) continue;
       if (!Array.isArray(o.items)) continue;
       if (o.status === "cancelled" || o.status === "canceled") continue;
 
-      for (const it of o.items) {
-        const pid = String(
-          it.productId ?? it.productId?._id ?? it.name ?? "unknown"
-        );
+      // tell TS what shape items have
+      for (const it of o.items as OrderItem[]) {
+        const pid = normalizeProductId(it);
         if (!agg[pid]) agg[pid] = { name: it.name ?? pid, revenue: 0, qty: 0 };
         agg[pid].revenue += (it.price ?? 0) * (it.quantity ?? 1);
         agg[pid].qty += it.quantity ?? 1;
@@ -193,9 +214,6 @@ export const getRevenueByCategory = query({
   },
 });
 
-/**
- * getOrdersByStatus and payment breakdown
- */
 export const getOrdersByStatus = query({
   handler: async (ctx) => {
     const orders = await ctx.db.query("orders").collect();
@@ -211,10 +229,7 @@ export const getOrdersByStatus = query({
   },
 });
 
-/**
- * getTopCustomers
- * returns top N users by revenue
- */
+
 export const getTopCustomers = query({
   args: {
     from: v.optional(v.number()),
@@ -246,9 +261,7 @@ export const getTopCustomers = query({
   },
 });
 
-/**
- * exportSalesCSV - returns an array of rows (caller can transform to CSV client-side)
- */
+
 export const exportSalesCSV = query({
   args: { from: v.optional(v.number()), to: v.optional(v.number()) },
   handler: async (ctx, args) => {
